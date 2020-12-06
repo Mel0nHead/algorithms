@@ -10,6 +10,9 @@ def merge_and_count_split_inversions(left, right):
             first = left.pop(0)
             result.append(first)
         else:
+            # If the first item in the right hand array is less than the first item in the left array, then 
+            # it must also be less than all the other remaining items in the left hand array, since both arrays 
+            # are sorted in ascending order.
             inversion_count += len(left)
             first = right.pop(0)
             result.append(first)
@@ -26,19 +29,21 @@ def merge_and_count_split_inversions(left, right):
 
 
 def sort_and_count_inversions(array):
+    # an array of one or less items cannot have any inversions
     if len(array) <= 1:
         return [array, 0]
 
     else:
-        # else split it into two equal sized arrays
+        # split array into two equal sized arrays
         n = len(array)
         nBy2 = n // 2
         a = array[0:nBy2]
         b = array[nBy2:n]
 
-        # apply merge sort to each sub array
+        # sort and count the number of inversions in both subarrays
         [left, left_inversions] = sort_and_count_inversions(a)
         [right, right_inversions] = sort_and_count_inversions(b)
+        # count the number of split inversions in the original array
         [sorted_array, split_inversions] = merge_and_count_split_inversions(left, right)
 
         return [sorted_array, left_inversions + right_inversions + split_inversions]
