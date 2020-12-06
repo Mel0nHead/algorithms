@@ -1,4 +1,25 @@
-arr = [1,3,5,7,4,6,8,9,2]
+# Merge sort - used for sorting an array of n integers
+# Has a Big-O of nlog(n)
+def merge(left, right):
+    result = []
+
+    while len(left) > 0 and len(right) > 0:
+        if left[0] < right[0]:
+            first = left.pop(0)
+            result.append(first)
+        else:
+            first = right.pop(0)
+            result.append(first)
+
+    while len(left) > 0:
+        item = left.pop(0)
+        result.append(item)
+
+    while len(right) > 0:
+        item = right.pop(0)
+        result.append(item)
+
+    return result
 
 def merge_sort(array):
     # if array is length 1 or less, return the array
@@ -9,36 +30,15 @@ def merge_sort(array):
     # else split it into two equal sized arrays
         n = len(array)
         nBy2 = n // 2
-        sub_arr_1 = arr[0:nBy2]
-        sub_arr_2 = arr[nBy2:n]
+        a = array[0:nBy2]
+        b = array[nBy2:n]
 
-    # apply merge_sort to each sub array
-        a = merge_sort(sub_arr_1)
-        b = merge_sort(sub_arr_2)
+    # apply merge sort to each sub array
+        left = merge_sort(a)
+        right = merge_sort(b)
 
-    # merge the results by looping through the two arrays
-        i=0
-        j=0
+    # return the merged results
+        return merge(left, right)
 
-        result = []
-
-        for k in range(0,n):  
-            if i >= len(a):
-                result.append(b[j])
-                j+=1
-
-            elif j >= len(b):
-                result.append(a[i])
-                i+=1
-
-            elif a[i] < b[j]:
-                result.append(a[i])
-                i+=1
-
-            else:
-                result.append(b[j])
-                j+=1
-        
-        return result
-
-print(merge_sort(arr))
+x = [456,2,4,8,99,5,12,5,90,55432,1,6]
+print(merge_sort(x))
