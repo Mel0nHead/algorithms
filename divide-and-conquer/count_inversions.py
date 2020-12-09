@@ -1,12 +1,19 @@
+massive_array = []
+
+file = open("./numbers.txt","r")
+for line in file:
+    massive_array.append(int(line))
+
 # Algorithm for counting the number of inversions in an array - done by extending the merge sort algorithm
-# Inversion is defined as a pair with indices (i,j) in array A such that i < j and A[i] > A[j]
+# Assumes the input is an array of distinct integers
+# Inversion is defined as a pair of indices (i,j) in array A such that i < j and A[i] > A[j]
 # Has a Big-O of nlog(n)
 def merge_and_count_split_inversions(left, right):
     result = []
     inversion_count = 0
 
     while len(left) > 0 and len(right) > 0:
-        if left[0] < right[0]:
+        if left[0] <= right[0]:
             first = left.pop(0)
             result.append(first)
         else:
@@ -48,4 +55,5 @@ def sort_and_count_inversions(array):
 
         return [sorted_array, left_inversions + right_inversions + split_inversions]
 
-print(sort_and_count_inversions([6,5,4,3,2,1])[1])
+print(sort_and_count_inversions(massive_array))[1] # should be 2,407,905,288
+
