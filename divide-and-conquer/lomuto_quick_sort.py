@@ -8,10 +8,12 @@ for line in file:
     massive_array.append(int(line))
 
 
-
 def partition(array, lowest_index, highest_index):
-    # For this implementation, we are using the first element as the pivot
-    pivot = array[lowest_index]
+    # For this implementation, we are using the last element as the pivot
+    # As a pre-processing step, we switch the pivot with the first element
+    pivot = array[highest_index]
+    array[highest_index] = array[lowest_index]
+    array[lowest_index] = pivot
 
     # i keeps track of where the partition is (smaller numbers to left, larger to right)
     i = lowest_index + 1
