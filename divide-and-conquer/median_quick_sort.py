@@ -3,17 +3,42 @@
 # The Big-O varies from n*log(n) to n^2, depending on how the pivot is chosen
 massive_array = []
 
-file = open("./quick_numbers_2.txt","r")
+file = open("./quick_numbers_1.txt","r")
 for line in file:
     massive_array.append(int(line))
 
+def get_median_pivot(array, lowest_index, highest_index):
+    array_length = len(array[lowest_index: highest_index + 1])
+    first = array[lowest_index]
+    last = array[highest_index]
+    median_index = 0
+
+    if (array_length % 2 == 0): # even case
+        median_index = (array_length / 2) - 1
+    else: # odd case
+        median_index = array_length // 2
+
+    median = array[median_index]
+    pivot_array = [[median, median_index],[first, lowest_index],[last, highest_index]] # array of [value, index]
+
+    # sort the array of pivot candidates from smallest to largest
+    i = 1
+    for j in range(1,3):
+        if pivot_array[j][0] < median:
+            temp = pivot_array[j]
+            pivot_array[j] = pivot_array[i]
+            pivot_array[i] = temp 
+            i += 1
+    # TODO: swap the first item of pivot array 
+    
+
+
+
 
 def partition(array, lowest_index, highest_index):
-    # For this implementation, we are using the last element as the pivot
-    # As a pre-processing step, we switch the pivot with the first element
-    pivot = array[highest_index]
-    array[highest_index] = array[lowest_index]
-    array[lowest_index] = pivot
+    # For this implementation, we are going to pick the median out of the first, middle and last element of the array
+    # As a pre-processing step, we switch the chosen pivot with the first element in the array
+    pivot = array[lowest_index]
 
     # i keeps track of where the partition is (smaller numbers to left, larger to right)
     i = lowest_index + 1
