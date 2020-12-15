@@ -52,7 +52,7 @@ def quick_sort(array, lowest_index, highest_index):
 
 massive_array = []
 
-file = open("./quick_numbers_3.txt","r")
+file = open("./quick_numbers_1.txt","r")
 for line in file:
     massive_array.append(int(line))
 
