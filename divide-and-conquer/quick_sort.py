@@ -3,7 +3,7 @@
 # The Big-O varies from n*log(n) to n^2, depending on how the pivot is chosen
 massive_array = []
 
-file = open("./quick_numbers_1.txt","r")
+file = open("./quick_numbers_3.txt","r")
 for line in file:
     massive_array.append(int(line))
 

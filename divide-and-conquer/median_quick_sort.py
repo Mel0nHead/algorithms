@@ -1,12 +1,8 @@
 # Quick Sort - an algorithm used to sort an array of integers in ascending order
 # There are multiple ways to choose a pivot, which determines the efficiency of splitting the array into sub-arrays
 # The Big-O varies from n*log(n) to n^2, depending on how the pivot is chosen
-massive_array = []
 
-file = open("./quick_numbers_1.txt","r")
-for line in file:
-    massive_array.append(int(line))
-
+# For this implementation, we are going to pick the median out of the first, middle and last element of the array
 def get_median_pivot(array, lowest_index, highest_index):
     array_length = len(array[lowest_index: highest_index + 1])
     first = array[lowest_index]
@@ -29,16 +25,22 @@ def get_median_pivot(array, lowest_index, highest_index):
             pivot_array[j] = pivot_array[i]
             pivot_array[i] = temp 
             i += 1
-    # TODO: swap the first item of pivot array 
-    
 
+    # Make sure the pivot of the array of pivot candidates is in the right place
+    temp_pivot = pivot_array[0]
+    pivot_array[0] = pivot_array[i-1]
+    pivot_array[i-1] = temp_pivot
+
+    # Return the middle (2nd) element of the sorted array of pivot candidates
+    return pivot_array[1] # [value, index]
 
 
 
 def partition(array, lowest_index, highest_index):
-    # For this implementation, we are going to pick the median out of the first, middle and last element of the array
+    [pivot, pivot_index] = get_median_pivot(array, lowest_index, highest_index)
     # As a pre-processing step, we switch the chosen pivot with the first element in the array
-    pivot = array[lowest_index]
+    array[pivot_index] = array[lowest_index]
+    array[lowest_index] = pivot
 
     # i keeps track of where the partition is (smaller numbers to left, larger to right)
     i = lowest_index + 1
@@ -67,5 +69,11 @@ def quick_sort(array, lowest_index, highest_index):
 
     else:
         return 0
+
+massive_array = []
+
+file = open("./quick_numbers_3.txt","r")
+for line in file:
+    massive_array.append(int(line))
 
 print(quick_sort(massive_array,0, len(massive_array) - 1))
