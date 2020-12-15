@@ -4,15 +4,9 @@
 
 # For this implementation, we are going to pick the median out of the first, middle and last element of the array
 def get_median_pivot(array, lowest_index, highest_index):
-    array_length = len(array[lowest_index: highest_index + 1])
     first = array[lowest_index]
     last = array[highest_index]
-    median_index = 0
-
-    if (array_length % 2 == 0): # even case
-        median_index = (array_length / 2) - 1
-    else: # odd case
-        median_index = array_length // 2
+    median_index = (lowest_index + highest_index) // 2
 
     median = array[median_index]
     pivot_array = [[median, median_index],[first, lowest_index],[last, highest_index]] # array of [value, index]
@@ -70,10 +64,32 @@ def quick_sort(array, lowest_index, highest_index):
     else:
         return 0
 
-massive_array = []
+massive_array = [
+2,
+1,
+12,
+13,
+16,
+10,
+9,
+5,
+18,
+8,
+17,
+20,
+19,
+3,
+4,
+11,
+14,
+6,
+7,
+15
+]
 
-file = open("./quick_numbers_3.txt","r")
-for line in file:
-    massive_array.append(int(line))
+# file = open("./quick_numbers_3.txt","r")
+# for line in file:
+#     massive_array.append(int(line))
 
-print(quick_sort(massive_array,0, len(massive_array) - 1))
+print(quick_sort(massive_array,0, len(massive_array) - 1)) # should be 56
+print(massive_array)
