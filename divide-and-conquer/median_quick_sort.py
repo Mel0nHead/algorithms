@@ -9,30 +9,16 @@ def get_median_pivot(array, lowest_index, highest_index):
     median_index = (lowest_index + highest_index) // 2
 
     median = array[median_index]
-    pivot_array = [[median, median_index],[first, lowest_index],[last, highest_index]] # array of [value, index]
-
-    # sort the array of pivot candidates from smallest to largest
-    i = 1
-    for j in range(1,3):
-        if pivot_array[j][0] < median:
-            temp = pivot_array[j]
-            pivot_array[j] = pivot_array[i]
-            pivot_array[i] = temp 
-            i += 1
-
-    # Make sure the pivot of the array of pivot candidates is in the right place
-    temp_pivot = pivot_array[0]
-    pivot_array[0] = pivot_array[i-1]
-    pivot_array[i-1] = temp_pivot
-
-    # Return the middle (2nd) element of the sorted array of pivot candidates
-    return pivot_array[1] # [value, index]
+    pivot_array = [first, median, last]
+    pivot_array.sort()
+    return pivot_array[1]
 
 
 
 def partition(array, lowest_index, highest_index):
-    [pivot, pivot_index] = get_median_pivot(array, lowest_index, highest_index)
+    pivot = get_median_pivot(array, lowest_index, highest_index)
     # As a pre-processing step, we switch the chosen pivot with the first element in the array
+    pivot_index = array.index(pivot)
     array[pivot_index] = array[lowest_index]
     array[lowest_index] = pivot
 
@@ -64,32 +50,10 @@ def quick_sort(array, lowest_index, highest_index):
     else:
         return 0
 
-massive_array = [
-2,
-1,
-12,
-13,
-16,
-10,
-9,
-5,
-18,
-8,
-17,
-20,
-19,
-3,
-4,
-11,
-14,
-6,
-7,
-15
-]
+massive_array = []
 
-# file = open("./quick_numbers_3.txt","r")
-# for line in file:
-#     massive_array.append(int(line))
+file = open("./quick_numbers_3.txt","r")
+for line in file:
+    massive_array.append(int(line))
 
 print(quick_sort(massive_array,0, len(massive_array) - 1)) # should be 56
-print(massive_array)
