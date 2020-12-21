@@ -43,7 +43,30 @@ def generateGraph():
     }
     return graph
 
-newGraph = generateGraph()
+def contractEdge(graph, edgeIndex):
+    # second will get merged into first
+    [nodeA, nodeB] = graph['edges'].pop(edgeIndex)
+    graph['edges'].remove([nodeB, nodeA]) # E.g. if [a,b] was selected, then remove [b,a] as they correspond to the same edge
+    firstNode = graph['nodeLookup'][nodeA]
+    secondNode = graph['nodeLookup'][nodeB]
+
+    secondNodeInfo = graph['nodesAndEdges'].pop(secondNode, None)
+
+    # merge secondNode's 'mergedWith' and 'edges' to the first node
+    graph['nodesAndEdges'][firstNode]['mergedWith'] += secondNodeInfo['mergedWith']
+    graph['nodesAndEdges'][firstNode]['edges'] += secondNodeInfo['edges']
+
+    # update the lookup
+    for index in secondNodeInfo['mergedWith']:
+        graph['nodeLookup'][index] = firstNode
+
+    # remove any self loops
+    newEdges = []
+    for edge in graph['nodesAndEdges'][firstNode]['edges']:
+        if edge not in graph['nodesAndEdges'][firstNode]['mergedWith']:
+            newEdges.append(edge)
+
+    graph['nodesAndEdges'][firstNode]['edges'] = newEdges
 
 def kargerMinCut(graph):
 
@@ -51,33 +74,16 @@ def kargerMinCut(graph):
     if len(graph['nodesAndEdges']) > 2:
         # Randomly select an edge
         randomIndex = 3 # TODO: make it random
-        
-        # second will get merged into first
-        # TODO: deal with the case where (a,b) has already been deleted, and then (b,a) is chosen
-        [nodeA, nodeB] = graph['edges'].pop(randomIndex)
-        firstNode = graph['nodeLookup'][nodeA]
-        secondNode = graph['nodeLookup'][nodeB]
-
-        secondNodeInfo = graph['nodeAndEdges'].pop(secondNode, None)
-
-        # merge secondNode's 'mergedWith' and 'edges' to the first node
-        graph['nodeAndEdges'][firstNode]['mergedWith'] += secondNodeInfo['mergedWith']
-        graph['nodeAndEdges'][firstNode]['edges'] += secondNodeInfo['edges']
-
-        # update the lookup
-        for index in secondNodeInfo['mergedWith']:
-            graph['nodeLookup'][index] = firstNode
-
-        # remove any self loops
-        newEdges = []
-        for edge in graph['nodeAndEdges'][firstNode]['edges']:
-            if edge not in graph['nodeAndEdges'][firstNode]['mergedWith']:
-                newEdges.append(edge)
-
-
-    # merge the two nodes attached to the edge into one node
-    # remove any self loops
+        contractEdge(graph, randomIndex)
+        cuts = kargerMinCut(graph)
+        return cuts
 
     # Finally, return the cut defined by the final two edges
+    else:
+        return len(graph['edges']) / 2
 
     # Remember to run this multiple times (with different seeds), making sure to remember the best answer
+
+newGraph = generateGraph()
+contractEdge(newGraph, 3) # [1,7]
+print(len(newGraph['nodesAndEdges']))
