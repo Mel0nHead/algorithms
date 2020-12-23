@@ -2,6 +2,7 @@
 # Used for calculating the minimum cut of an undirected graph
 # Assuming the original graph has n nodes, m edges, complexity is O(m*n^2)
 # Parallel edges are allowed
+import random
 
 # [[1], 2,3,4]
 # [[2], 1,3,4]
@@ -53,6 +54,7 @@ def contractEdge(graph, edgeIndex):
     secondNodeInfo = graph['nodesAndEdges'].pop(secondNode, None)
 
     # merge secondNode's 'mergedWith' and 'edges' to the first node
+    print(graph['nodesAndEdges'][firstNode])
     graph['nodesAndEdges'][firstNode]['mergedWith'] += secondNodeInfo['mergedWith']
     graph['nodesAndEdges'][firstNode]['edges'] += secondNodeInfo['edges']
 
@@ -73,7 +75,7 @@ def kargerMinCut(graph):
     # While there are more than 2 nodes
     if len(graph['nodesAndEdges']) > 2:
         # Randomly select an edge
-        randomIndex = 3 # TODO: make it random
+        randomIndex = random.randint(0, len(graph['edges']) - 1)
         contractEdge(graph, randomIndex)
         cuts = kargerMinCut(graph)
         return cuts
@@ -85,5 +87,4 @@ def kargerMinCut(graph):
     # Remember to run this multiple times (with different seeds), making sure to remember the best answer
 
 newGraph = generateGraph()
-contractEdge(newGraph, 3) # [1,7]
-print(len(newGraph['nodesAndEdges']))
+print(kargerMinCut(newGraph))
