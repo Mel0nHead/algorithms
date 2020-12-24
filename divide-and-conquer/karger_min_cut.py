@@ -87,7 +87,7 @@ def repeatKarger(graph):
 
     while i < N:
         i += 1
-        print('Currently on iteration ' + str(i) + ' out of ' + str(int(N)))
+        print('Currently on iteration ' + str(i) + ' out of ' + str(int(N)), lowestCut)
         graphCopy = copy.deepcopy(graph)
         minCut = kargerMinCut(graphCopy)
 
@@ -96,7 +96,7 @@ def repeatKarger(graph):
 
     return lowestCut
 
-# Currently takes ~28s to complete 1000 iterations
+# Currently takes ~28 seconds to complete 1000 iterations
 newGraph = generateGraph()
 minimumCut = repeatKarger(newGraph)
 print(minimumCut)
