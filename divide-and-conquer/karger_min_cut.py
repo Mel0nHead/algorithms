@@ -45,6 +45,14 @@ def generateGraph():
     return graph
 
 def contractEdge(graph, edgeIndex):
+    # check if the chosen edge is a self loop
+    [nodeA, nodeB] = graph['edges'][edgeIndex]
+    x = graph['nodeLookup'][nodeA]
+    y = graph['nodeLookup'][nodeB]
+
+    if x == y:
+        return
+
     # second will get merged into first
     [nodeA, nodeB] = graph['edges'].pop(edgeIndex)
     graph['edges'].remove([nodeB, nodeA]) # E.g. if [a,b] was selected, then remove [b,a] as they correspond to the same edge
@@ -54,7 +62,6 @@ def contractEdge(graph, edgeIndex):
     secondNodeInfo = graph['nodesAndEdges'].pop(secondNode, None)
 
     # merge secondNode's 'mergedWith' and 'edges' to the first node
-    print(graph['nodesAndEdges'][firstNode])
     graph['nodesAndEdges'][firstNode]['mergedWith'] += secondNodeInfo['mergedWith']
     graph['nodesAndEdges'][firstNode]['edges'] += secondNodeInfo['edges']
 
@@ -82,7 +89,9 @@ def kargerMinCut(graph):
 
     # Finally, return the cut defined by the final two edges
     else:
-        return len(graph['edges']) / 2
+        firstNode = graph['nodesAndEdges'].keys()[0]
+        print(graph)
+        return len(graph['nodesAndEdges'][firstNode]['edges'])
 
     # Remember to run this multiple times (with different seeds), making sure to remember the best answer
 
