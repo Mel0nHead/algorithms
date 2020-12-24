@@ -3,18 +3,8 @@
 # Assuming the original graph has n nodes, m edges, complexity is O(m*n^2)
 # Parallel edges are allowed
 import random
-
-# [[1], 2,3,4]
-# [[2], 1,3,4]
-# [[3], 2,'1',4]
-# [[4], 2,3,1]
-
-# [[1,3], 2,4,2,4]
-# [[2], 1,3,4]
-# [[4], 2,'3',1]
-
-# [[1,3,4], 2,2,2]
-# [[2], 1,3,4]
+import copy
+import math
 
 def generateGraph():
     nodeLookup = {} # In the format { originalLabel: newLabel }, so that we know which nodes are merged with which
@@ -90,10 +80,30 @@ def kargerMinCut(graph):
     # Finally, return the cut defined by the final two edges
     else:
         firstNode = graph['nodesAndEdges'].keys()[0]
-        print(graph)
         return len(graph['nodesAndEdges'][firstNode]['edges'])
 
-    # Remember to run this multiple times (with different seeds), making sure to remember the best answer
+# Since the Karger algorithm is not guaranteed to always return the minimum cut, we have to run in many times and take
+# the lowest output
+def repeatKarger(graph):
+    lowestCut = None
+    n = len(graph['nodeLookup']) # number of nodes
+    N = (n**2)*math.log(n) # number of trials we should do
+    i = 0
+
+    while i < N:
+        i += 1
+        print('Currently on iteration ' + str(i) + ' out of ' + str(int(N)))
+        graphCopy = copy.deepcopy(graph)
+        minCut = kargerMinCut(graphCopy)
+
+        if lowestCut == None:
+            lowestCut = minCut
+        elif minCut < lowestCut:
+            lowestCut = minCut
+
+    return lowestCut
+
 
 newGraph = generateGraph()
-print(kargerMinCut(newGraph))
+minimumCut = repeatKarger(newGraph)
+print(minimumCut)
