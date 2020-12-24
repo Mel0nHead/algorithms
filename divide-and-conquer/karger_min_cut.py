@@ -36,18 +36,15 @@ def generateGraph():
 
 def contractEdge(graph, edgeIndex):
     # check if the chosen edge is a self loop
-    [nodeA, nodeB] = graph['edges'][edgeIndex]
-    x = graph['nodeLookup'][nodeA]
-    y = graph['nodeLookup'][nodeB]
+    [nodeA, nodeB] = graph['edges'].pop(edgeIndex)
+    firstNode = graph['nodeLookup'][nodeA]
+    secondNode = graph['nodeLookup'][nodeB]
 
-    if x == y:
+    if firstNode == secondNode: # Means that chosen edge is a self loop
         return
 
     # second will get merged into first
-    [nodeA, nodeB] = graph['edges'].pop(edgeIndex)
     graph['edges'].remove([nodeB, nodeA]) # E.g. if [a,b] was selected, then remove [b,a] as they correspond to the same edge
-    firstNode = graph['nodeLookup'][nodeA]
-    secondNode = graph['nodeLookup'][nodeB]
 
     secondNodeInfo = graph['nodesAndEdges'].pop(secondNode, None)
 
@@ -58,14 +55,6 @@ def contractEdge(graph, edgeIndex):
     # update the lookup
     for index in secondNodeInfo['mergedWith']:
         graph['nodeLookup'][index] = firstNode
-
-    # remove any self loops
-    newEdges = []
-    for edge in graph['nodesAndEdges'][firstNode]['edges']:
-        if edge not in graph['nodesAndEdges'][firstNode]['mergedWith']:
-            newEdges.append(edge)
-
-    graph['nodesAndEdges'][firstNode]['edges'] = newEdges
 
 def kargerMinCut(graph):
 
@@ -80,7 +69,14 @@ def kargerMinCut(graph):
     # Finally, return the cut defined by the final two edges
     else:
         firstNode = graph['nodesAndEdges'].keys()[0]
-        return len(graph['nodesAndEdges'][firstNode]['edges'])
+
+        # remove any self loops
+        newEdges = []
+        for edge in graph['nodesAndEdges'][firstNode]['edges']:
+            if edge not in graph['nodesAndEdges'][firstNode]['mergedWith']:
+                newEdges.append(edge)
+
+        return len(newEdges)
 
 # Since the Karger algorithm is not guaranteed to always return the minimum cut, we have to run in many times and take
 # the lowest output
@@ -103,7 +99,7 @@ def repeatKarger(graph):
 
     return lowestCut
 
-
+# Currently takes ~1m 18s to complete 1000 iterations
 newGraph = generateGraph()
 minimumCut = repeatKarger(newGraph)
 print(minimumCut)
