@@ -45,7 +45,6 @@ def contractEdge(graph, edgeIndex):
 
     # second will get merged into first
     graph['edges'].remove([nodeB, nodeA]) # E.g. if [a,b] was selected, then remove [b,a] as they correspond to the same edge
-
     secondNodeInfo = graph['nodesAndEdges'].pop(secondNode, None)
 
     # merge secondNode's 'mergedWith' and 'edges' to the first node
@@ -68,7 +67,7 @@ def kargerMinCut(graph):
 
     # Finally, return the cut defined by the final two edges
     else:
-        firstNode = graph['nodesAndEdges'].keys()[0]
+        firstNode = list(graph['nodesAndEdges'].keys())[0]
 
         # remove any self loops
         newEdges = []
@@ -99,7 +98,7 @@ def repeatKarger(graph):
 
     return lowestCut
 
-# Currently takes ~1m 18s to complete 1000 iterations
+# Currently takes ~28s to complete 1000 iterations
 newGraph = generateGraph()
 minimumCut = repeatKarger(newGraph)
 print(minimumCut)
