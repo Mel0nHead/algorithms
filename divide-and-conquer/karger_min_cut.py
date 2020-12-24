@@ -91,9 +91,7 @@ def repeatKarger(graph):
         graphCopy = copy.deepcopy(graph)
         minCut = kargerMinCut(graphCopy)
 
-        if lowestCut == None:
-            lowestCut = minCut
-        elif minCut < lowestCut:
+        if lowestCut == None or minCut < lowestCut:
             lowestCut = minCut
 
     return lowestCut
