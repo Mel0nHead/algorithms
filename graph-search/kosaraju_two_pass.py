@@ -2,9 +2,10 @@
 # This is a modification of the Depth-First Search algorithm, used to compute the strongly connected components of a graph
 # Assumes that the input is a directed graph with n nodes, m edges
 # It has a Big-O of n + m
+import copy
 
 def generateGraph():
-    file = open("./kosaraju_data.txt","r")
+    file = open("./scc.txt","r")
     edges = []
     discoveredNodes = {}
 
@@ -14,15 +15,19 @@ def generateGraph():
         discoveredNodes[edge[0]] = False
         discoveredNodes[edge[1]] = False
 
+    discoveredNodesCopy = copy.deepcopy(discoveredNodes)
+
     graph = {
         'edges': edges,
         'discoveredNodes': discoveredNodes,
+        'discoveredNodesSecondPass': discoveredNodesCopy,
         'finishingTimes': {},
-        'leaders': {}
+        'leaders': {},
+        'finishingTimeCounter': 0
     }
     return graph
 
-def depthFirstSearchFirstPass(graph, chosenNode, finishingTime):
+def depthFirstSearchFirstPass(graph, chosenNode):
     # reverse all the edges
     tailIndex = 1
     headIndex = 0
@@ -37,18 +42,22 @@ def depthFirstSearchFirstPass(graph, chosenNode, finishingTime):
     for edge in newEdges:
         headNode = edge[headIndex]
         if graph['discoveredNodes'][headNode] == False:
-            depthFirstSearchFirstPass(graph, headNode, finishingTime)
+            depthFirstSearchFirstPass(graph, headNode)
 
-    finishingTime += 1
-    graph['finishingTimes'][finishingTime] = chosenNode
+    graph['finishingTimeCounter'] += 1
+    graph['finishingTimes'][graph['finishingTimeCounter']] = chosenNode
 
 def depthFirstSearchSecondPass(graph, chosenNode, currentLeader):
     tailIndex = 0
     headIndex = 1
 
-    graph['leaders'][chosenNode] = currentLeader
+    if currentLeader in graph['leaders']:
+        graph['leaders'][currentLeader] += 1
+    else:
+        graph['leaders'][currentLeader] = 1
+
     # mark node as discovered
-    graph['discoveredNodes'][chosenNode] = True
+    graph['discoveredNodesSecondPass'][chosenNode] = True
 
     # find all edges that have chosenNode as a tail (chosenNode -> i)
     newEdges = [e for e in graph['edges'] if e[tailIndex] == chosenNode]
@@ -56,21 +65,32 @@ def depthFirstSearchSecondPass(graph, chosenNode, currentLeader):
     # for each edge, if head node is undiscovered, call depthFirstSearch(graph, headNode)
     for edge in newEdges:
         headNode = edge[headIndex]
-        if graph['discoveredNodes'][headNode] == False:
+        if graph['discoveredNodesSecondPass'][headNode] == False:
             depthFirstSearchSecondPass(graph, headNode, currentLeader)
 
 def kosarajuTwoPass(graph):
     # Run DFS on the reversed graph (edges have been reversed), calculating the 'finishing time' of each node
-    finishingTime = 0
     n = len(graph['discoveredNodes'].keys())
 
     for i in range(n, 0, -1):
+        print('first pass - iteration: ' + str(i))
         if graph['discoveredNodes'][i] == False:
-            depthFirstSearchFirstPass(graph, i, finishingTime)
+            depthFirstSearchFirstPass(graph, i)
 
     # Run DFS on the non-reversed graph, in descending order of 'finishing time' from previous DFS call
     for j in range(n, 0, -1):
+        print('second pass - iteration: ' + str(j))
         originalNodeLabel = graph['finishingTimes'][j]
-        if graph['discoveredNodes'][originalNodeLabel] == False:
+        if graph['discoveredNodesSecondPass'][originalNodeLabel] == False:
             leader = originalNodeLabel
             depthFirstSearchSecondPass(graph, originalNodeLabel, leader)
+
+    sscSizeArray = list(graph['leaders'].values())
+    sscSizeArray.sort(reverse=True)
+    return sscSizeArray[0:5]
+
+
+
+newGraph = generateGraph()
+arr = kosarajuTwoPass(newGraph)
+print(arr)
