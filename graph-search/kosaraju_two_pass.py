@@ -89,8 +89,7 @@ def kosarajuTwoPass(graph):
     sscSizeArray.sort(reverse=True)
     return sscSizeArray[0:5]
 
-
-
+# Currently takes ~15 seconds to do 100 iterations of the first pass algo
 newGraph = generateGraph()
 arr = kosarajuTwoPass(newGraph)
 print(arr)
