@@ -1,6 +1,6 @@
 # node labels range from 1 to 875714. 875715 was used because of the range operator... range(875715) goes up to 875714.
 # numberOfNodes = 875715
-numberOfNodes = 13
+numberOfNodes = 875715
 
 # Adjacency representations of the graph and reverse graph
 graph = [[] for i in range(numberOfNodes)]
@@ -18,7 +18,7 @@ order = []  # The finishing orders after the first pass
 
 ########################################################
 # Importing the graphs
-file = open("kosaraju_data.txt", "r")
+file = open("scc.txt", "r")
 data = file.readlines()
 
 for line in data:
@@ -90,4 +90,4 @@ for node in order:
 # Getting the five biggest sccs
 # TODO: find out why an extra 1 seems to get added to the output
 scc.sort(reverse=True)
-print(scc)
+print(scc[0:5])
