@@ -26,6 +26,7 @@ for line in data:
         
 # mark the source node as explored (in this case we have just chosen the first node)
 explored[0] = True
+exploredCount += 1
 
 # While there are still nodes that have not bee explored
 while exploredCount < N:
@@ -34,7 +35,6 @@ while exploredCount < N:
 
     # Find all edges going from explored to unexplored
     for [fromNode, toNode, weight] in adjArray:
-        print(exploredCount, fromNode, toNode)
         if explored[fromNode - 1] == True and explored[toNode - 1] == False:
         # Amongst them, find the one with the smallest dijkstra greedy criterion
             if shortestPaths[fromNode - 1] + weight < minGreedyCriterion:
@@ -47,3 +47,7 @@ while exploredCount < N:
     exploredCount += 1
     # update the shortest path of newly added node
     shortestPaths[nodeToPullIn - 1] = minGreedyCriterion
+
+indices = [7,37,59,82,99,115,133,165,188,197]
+result = [shortestPaths[i-1] for i in indices]
+print(result)
