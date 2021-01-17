@@ -18,10 +18,11 @@ count = 0
 
 for line in file:
     count += 1
+    print(count)
     incoming_number = int(line)
 
     # if it is less than or equal to the min of heap_high, it gets inserted into heap_low
-    if len(heap_low) == 0 or incoming_number <= heap_high[0]:
+    if len(heap_low) == 0 or incoming_number <= heap_low[0] * -1:
         heapq.heappush(heap_low, incoming_number * -1)
         heapq.heapify(heap_low)
     # otherwise, it gets inserted into heap_high
@@ -37,7 +38,7 @@ for line in file:
         heapq.heappush(heap_high, max_item)
         heapq.heapify(heap_high)
         heapq.heapify(heap_low)
-        
+
     if len(heap_high) > balanced_split:
         min_item = heapq.heappop(heap_high)
         heapq.heappush(heap_low, min_item * -1)
@@ -52,4 +53,4 @@ for line in file:
         median = heap_low[0] * -1
         medians.append(median)
 
-print(medians)
+print(sum(medians) % 10000)
