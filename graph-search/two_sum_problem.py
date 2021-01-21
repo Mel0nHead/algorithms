@@ -34,4 +34,5 @@ def iterate_two_sum(hashTable, lowerBound, upperBound):
     
     return totalCount
 # Currently very slow: takes ~ 2 mins 4 seconds to iterate through 500 values of t
+# It will take over 80 mins to complete the whole thing
 print('FINAL ANSWER', iterate_two_sum(H, -10000, 10000))
