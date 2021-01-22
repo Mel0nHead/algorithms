@@ -1,14 +1,15 @@
-file = open("./two_sum.txt","r")
+file = open("./two_sum_data.txt","r")
 
 array = sorted([int(i) for i in file])
-lowerBound = 3
-upperBound = 10
+lowerBound = -10000
+upperBound = 10000
 
 i = 0
 j = len(array) - 1
 H = {} # this could be a set
 
 while i < j:
+    print(j - i)
     if array[i] + array[j] < lowerBound:
         i += 1
     elif array[i] + array[j] > upperBound:
