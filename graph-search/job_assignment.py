@@ -4,9 +4,16 @@
 # The completion time (C) of job i should be the sum of the lengths of all the preceeding jobs plus the length of job i
 
 # Jobs will be in the format [weight, length]
-jobs = [[5,3],[8,0],[6,4], [10,2]]
+file = open("./jobs.txt","r")
+jobs = []
 
-def compare(jobA, jobB):
+for line in file:
+    job = [float(i) for i in line.split()]
+
+    if len(job) > 1:
+        jobs.append(job)
+
+def compareDifference(jobA, jobB):
     diffA = jobA[0] - jobA[1]
     diffB = jobB[0] - jobB[1]
 
@@ -16,7 +23,18 @@ def compare(jobA, jobB):
     else: 
         return diffB - diffA
 
-sortedJobs = sorted(jobs, cmp=compare)
+def compareRatio(jobA, jobB):
+    ratioA = jobA[0] / jobA[1]
+    ratioB = jobB[0] / jobB[1]
+
+    if ratioB > ratioA:
+        return 1
+    elif ratioA > ratioB:
+        return -1
+    else: 
+        return 0
+
+sortedJobs = sorted(jobs, cmp=compareRatio)
 
 completionTime = 0
 weightedTotal = 0
@@ -24,3 +42,5 @@ weightedTotal = 0
 for j in sortedJobs:
     completionTime += j[1]
     weightedTotal += completionTime * j[0]
+
+print(weightedTotal)
