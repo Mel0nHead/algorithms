@@ -3,7 +3,7 @@
 # The `spacing` of a clustering is the distance between the closest two seperated (in different clusters) points
 import dset
 
-file = open('./clustering.txt', 'r')
+file = open('./clustering_1.txt', 'r')
 k = 4 # target number of clusters
 numberOfClusters = 0
 edges = []
