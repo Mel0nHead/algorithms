@@ -1,6 +1,7 @@
 import dset
+import itertools
 
-file = open('./big_clustering.txt', 'r')
+file = open('./big_clustering_2.txt', 'r')
 
 numberOfNodes = 0
 numberOfBits = 0
@@ -27,7 +28,9 @@ for i in range(0, numberOfNodes):
     unionsArr.append(dset.Set())
 
 # bit masks are used to find the nodes which have a hamming distance of < 3 from each other
-maskArr = [1 << i for i in range(numberOfBits)] + [2 << i for i in range(numberOfBits)] + [0]
+maskArr = [1 << i for i in range(numberOfBits)] + [0]
+hamming2Masks = [i ^ j for i in maskArr for j in maskArr]
+maskArr += hamming2Masks
 
 for mask in maskArr:
     for value in myDict.keys():
