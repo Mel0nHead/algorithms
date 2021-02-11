@@ -16,18 +16,19 @@ for line in file:
 
 numberOfSymbols = weights.pop(0)[0]
 
+
 # put all weights into a min-heap
 heapq.heapify(weights)
 
 # while there is more than one node in the queue
 while len(weights) > 1:
-    # remove the two nodes of highest priority from the queue
+# remove the two nodes of highest priority from the queue
     smallest = heapq.heappop(weights)
     secondSmallest = heapq.heappop(weights)
-    mergedItem = (smallest[0] + secondSmallest[0], smallest[1] + secondSmallest[1])
+    mergedItem = (smallest[0] + secondSmallest[0], smallest[1] + ',' + secondSmallest[1])
 
     # increment the length for all symbols who have been merged
-    symbols = [int(s) for s in mergedItem[1]]
+    symbols = [int(s) for s in mergedItem[1].split(',')]
     for s in symbols:
         lengths[s] += 1
 
@@ -35,6 +36,6 @@ while len(weights) > 1:
     heapq.heappush(weights, mergedItem)
 
 lengths.pop(0) # first item was just a placeholder
-print(max(lengths))
-print(min(lengths))
+print(max(lengths)) # 19
+print(min(lengths)) # 9
 
