@@ -5,7 +5,6 @@
 # Import the data
 file = open('./big_knapsack.txt', 'r')
 items = [] # each item will be in the format [value, weight]
-A = []
 
 for line in file:
     arr = [int(x) for x in line.split()]
@@ -13,17 +12,19 @@ for line in file:
 
 [C, n] = items.pop(0)
 
-for i in range(0, 2):
-    A.append([0]* (C + 1)) # there will be two subarrays - one for previous answers, one for current answers
+currentAnswers = [0]* (C + 1)
+previousAnswers = [0]* (C + 1)
 
 for i in range(1, n + 1): # 1, 2,...,n
+    print("iteration " + str(i) + ' of ' + str(n))
     for x in range(0, C + 1): # 0, 1, 2,..., C
         [value, weight] = items[i - 1]
 
         if weight > x:
-            A[1][x] = A[0][x]
+            currentAnswers[x] = previousAnswers[x]
         else:
-            A[1][x] = max(A[0][x], A[0][x - weight] + value)
+            currentAnswers[x] = max(previousAnswers[x], previousAnswers[x - weight] + value)
+    
+    previousAnswers = list(currentAnswers)
 
-
-# print(A[n][C])
+print(currentAnswers[C])
