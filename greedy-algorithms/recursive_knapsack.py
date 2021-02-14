@@ -1,9 +1,11 @@
 # The Knapsack problem: given an input of n items (with each item i having a value v_i and size w_i), and a knapsack capacity C,
 # find the maximum value subset of the n items such that the total size of the subset is less than or equal to C
 # The solution is to use dynamic programming; it has O(nC)
+import sys
+sys.setrecursionlimit(3000)
 
 # Import the data
-file = open('./big_knapsack.txt', 'r')
+file = open('./recursive_knapsack.txt', 'r')
 items = [] # each item will be in the format [value, weight]
 
 for line in file:
@@ -11,21 +13,27 @@ for line in file:
     items.append(arr)
 
 [C, n] = items.pop(0)
+answers = {}
 
-currentAnswers = [0]* (C + 1)
-previousAnswers = [0]* (C + 1)
+# i items, x capacity
+def knapsack(i, x):
+    print(i, x)
+    if i == 0:
+        return 0
 
-for i in range(1, n + 1): # 1, 2,...,n
-    print("iteration " + str(i) + ' of ' + str(n))
-    for x in range(0, C + 1): # 0, 1, 2,..., C
-        [value, weight] = items[i - 1]
-        prevAns = previousAnswers[x]
+    [value, weight] = items[i - 1]
+    key = str(i) + ',' + str(x)
 
+    if key in answers:
+        return answers[key]
+    else:
+        ans = 0
         if weight > x:
-            currentAnswers[x] = prevAns
+            ans = knapsack(i - 1, x)
         else:
-            currentAnswers[x] = max(prevAns, previousAnswers[x - weight] + value)
-    
-    previousAnswers = currentAnswers[:]
+            ans = max(knapsack(i - 1, x), knapsack(i-1, x-weight) + value)
+        
+        answers[key] = ans
+        return ans
 
-print(currentAnswers[C])
+print(knapsack(n,C))
